@@ -22,7 +22,8 @@ class TaskType extends AbstractType
                 'label' => 'Contenu'
                 ])
             ->add('isDone', CheckboxType::class, [
-                'label' => 'Terminé'
+                'label' => 'Terminé',
+                'required' => false
                 ])
         ;
     }
