@@ -18,6 +18,7 @@ class UserController extends AbstractController
     #[Route('/users', name: 'user_list')]
     public function listAction(UserRepository $userRepo): Response
     {
+
         $users = $userRepo->findAll();
 
         return $this->render('user/list.html.twig', [
@@ -26,15 +27,42 @@ class UserController extends AbstractController
     }
 
 
+    #[Route('/users/create', name: 'user_create')]
+    public function createAction(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $manager)
+    {
+
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            $user->setRoles([$request->request->get('role')]);
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $manager->persist($user);
+            $manager->flush();
+            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+            return $this->redirectToRoute('user_list');
+        }
+        return $this->render('user/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     #[Route('/users/{id}/edit', name: 'user_edit')]
     public function editAction(User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $manager, Request $request)
     {
-        
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles([$request->request->get('role')]);
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -47,7 +75,7 @@ class UserController extends AbstractController
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('user_list');
         }
 
         return $this->render('user/edit.html.twig', [
