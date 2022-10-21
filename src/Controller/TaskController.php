@@ -16,8 +16,21 @@ class TaskController extends AbstractController
     #[Route('/task', name: 'task_list')]
     public function listAction(TaskRepository $taskRepo): Response
     {
-        $task = $taskRepo->findAll();
-        
+
+        //TODO ici on affiches les taches null pour l'admin si il faut dfaire ça il faut ajouter dans le reste des routes la gestion
+        /*$userRole = $this->getUser()->getRoles();
+
+        if ($userRole == ("ROLE_ADMIN")){
+            $task = $taskRepo->findBy(['user' => null]);
+
+            return $this->render('task/list.html.twig', [
+                'tasks' => $task,
+            ]);
+        }*/
+
+        $user = $this->getUser()->getId();
+
+        $task = $taskRepo->findBy(['user' => $user]);
 
         return $this->render('task/list.html.twig', [
             'tasks' => $task,
@@ -30,9 +43,10 @@ class TaskController extends AbstractController
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) { 
 
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $task->setUser($this->getUser());
             $task->setCreatedAt((new \DateTimeImmutable('now')));
             $manager->persist($task);
             $manager->flush();
@@ -49,10 +63,14 @@ class TaskController extends AbstractController
     #[Route('/task/{id}/edit', name: 'task_edit')]
     public function editAction(Request $request, EntityManagerInterface $manager, Task $task)
     {
+        if ($task->getUser() != $this->getUser()) {
+            $this->addFlash('error', 'La tâche ne vous partiens pas.');
+            return $this->redirectToRoute('task_list');
+        }
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -68,7 +86,11 @@ class TaskController extends AbstractController
     #[Route('/task/{id}/togle', name: 'task_toggle')]
     public function toggleTaskAction(EntityManagerInterface $manager, Task $task)
     {
-    
+        if ($task->getUser() != $this->getUser()) {
+            $this->addFlash('error', 'La tâche ne vous partiens pas.');
+            return $this->redirectToRoute('task_list');
+        }
+
         $task->toggle(!$task->isIsDone());
 
         $manager->flush();
@@ -81,11 +103,30 @@ class TaskController extends AbstractController
     #[Route('/task/{id}/delete', name: 'task_delete')]
     public function deleteTaskAction(EntityManagerInterface $manager, Task $task)
     {
+        if ($task->getUser() != $this->getUser()) {
+            $this->addFlash('error', 'La tâche ne vous partiens pas.');
+            return $this->redirectToRoute('task_list');
+        }
         $manager->remove($task);
         $manager->flush();
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
-    }
 
+}
+
+    //TODO creer une route dedie a changer le user de taches sans user
+
+    /*#[Route('/task/anonyme', name: 'task_anonyme')]
+    public function anonymeTaskAction(TaskRepository $taskRepo)
+    {
+        $anonymes = $taskRepo->findBy(['user' => null]);
+
+        $anonymeUser = 'anonyme';
+        $anonyme = [];
+        foreach ( $anonymes as $anonyme){
+        $anonyme->setUser($anonymeUser);
+    }
+        dd($anonyme);
+    }*/
 }
