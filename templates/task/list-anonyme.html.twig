@@ -4,11 +4,10 @@
 {% endblock %}
 
 {% block body %}
-        {% if tasks != null %} 
-	    <a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
+        {% if tasks != null %}
 	    <div class="row">
 		{% for task in tasks %}
-			{% if task.isDone == false %}
+        
 			<div class="col-sm-4 col-lg-4 col-md-4">
 				<div class="thumbnail">
 					<div class="caption">
@@ -20,24 +19,23 @@
 							{% endif %}
 						</h4>
 						<h4>
-							<a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a>
+							<a href="{{ path('task_edit_anonyme', {'id' : task.id }) }}">{{ task.title }}</a>
 						</h4>
 						<p>{{ task.content }}</p>
 					</div>
 					<div>
-						<form action="{{ path('task_toggle', {'id' : task.id }) }}">
+						<form action="{{ path('task_toggle_anonyme', {'id' : task.id }) }}">
 							<button class="btn btn-success btn-sm pull-right">
 								{% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée
 								{% endif %}
 							</button>
 						</form>
-						<form action="{{ path('task_delete', {'id' : task.id }) }}">
+						<form action="{{ path('task_delete_anonyme', {'id' : task.id }) }}">
 							<button class="btn btn-danger btn-sm pull-right">Supprimer</button>
 						</form>
 					</div>
 				</div>
 			</div>
-			{% endif %}
         {% endfor %}
 		{% else %}
 			<div class="alert alert-warning" role="alert">

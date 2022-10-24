@@ -15,7 +15,9 @@
 .carousel-holder {
     margin-bottom: 30px;
 }
-
+.admin-btn{
+    margin-top: 10px;
+}
 .carousel-control,
 .item {
     border-radius: 4px;
