@@ -5,9 +5,15 @@
 {% endblock %}
 
 {% block body %}
-	<div class="row">
+	<div class="row text-center">
 		<a href="{{ path('task_create') }}" class="btn btn-success">Créer une nouvelle tâche</a>
 		<a href="{{ path('task_list') }}" class="btn btn-info">Consulter la liste des tâches à faire</a>
-		<a href="" class="btn btn-secondary">Consulter la liste des tâches terminées</a>
+		<a href="{{ path('task_list_done') }}" class="btn btn-success">Consulter la liste des tâches terminées</a>
+	</div>
+	<div class="row text-center admin-btn">
+		{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{ path('task_list_anonyme') }}" class="btn btn-info">Consulter la liste des tâches anonyme</a>
+			<a href="{{ path('user_list') }}" class="btn btn-info">Consulter la liste des utilisateurs</a>
+		{% endif %}
 	</div>
 {% endblock %}

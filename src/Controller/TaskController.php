@@ -17,22 +17,25 @@ class TaskController extends AbstractController
     public function listAction(TaskRepository $taskRepo): Response
     {
 
-        //TODO ici on affiches les taches null pour l'admin si il faut dfaire ça il faut ajouter dans le reste des routes la gestion
-        /*$userRole = $this->getUser()->getRoles();
+        $user = $this->getUser()->getId();
 
-        if ($userRole == ("ROLE_ADMIN")){
-            $task = $taskRepo->findBy(['user' => null]);
+        $task = $taskRepo->findBy(['user' => $user]);
 
-            return $this->render('task/list.html.twig', [
-                'tasks' => $task,
-            ]);
-        }*/
+        //dd($task);
+
+        return $this->render('task/list.html.twig', [
+            'tasks' => $task,
+        ]);
+    }
+    #[Route('/task/done', name: 'task_list_done')]
+    public function listDoneAction(TaskRepository $taskRepo): Response
+    {
 
         $user = $this->getUser()->getId();
 
         $task = $taskRepo->findBy(['user' => $user]);
 
-        return $this->render('task/list.html.twig', [
+        return $this->render('task/list-done.html.twig', [
             'tasks' => $task,
         ]);
     }
@@ -95,8 +98,13 @@ class TaskController extends AbstractController
 
         $manager->flush();
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        if ($task->isIsDone() == true){
+            return $this->redirectToRoute('task_list');
+        }
+        else{
+            return $this->redirectToRoute('task_list_done');
+        }
 
-        return $this->redirectToRoute('task_list');
     }
 
 
@@ -113,20 +121,75 @@ class TaskController extends AbstractController
 
         return $this->redirectToRoute('task_list');
 
-}
-
-    //TODO creer une route dedie a changer le user de taches sans user
-
-    /*#[Route('/task/anonyme', name: 'task_anonyme')]
-    public function anonymeTaskAction(TaskRepository $taskRepo)
-    {
-        $anonymes = $taskRepo->findBy(['user' => null]);
-
-        $anonymeUser = 'anonyme';
-        $anonyme = [];
-        foreach ( $anonymes as $anonyme){
-        $anonyme->setUser($anonymeUser);
     }
-        dd($anonyme);
-    }*/
+
+//TODO gestion de task sans utilisateur
+
+    #[Route('/task/anonyme', name: 'task_list_anonyme')]
+    public function listAnonymeAction(TaskRepository $taskRepo): Response
+    {
+
+        $task = $taskRepo->findBy(['user' => null]);
+
+        return $this->render('task/list-anonyme.html.twig', [
+            'tasks' => $task,
+        ]);
+    }
+
+
+    #[Route('/task/anonyme/{id}/edit', name: 'task_edit_anonyme')]
+    public function editAnonymeAction(Request $request, EntityManagerInterface $manager, Task $task)
+    {
+        if ($task->getUser() != null) {
+            $this->addFlash('error', 'La tâche ne vous partiens pas.');
+            return $this->redirectToRoute('task_list');
+        }
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->flush();
+            $this->addFlash('success', 'La tâche a bien été modifiée.');
+
+            return $this->redirectToRoute('task_list_anonyme');
+        }
+
+        return $this->render('task/edit-anonyme.html.twig', [
+            'form' => $form->createView(),
+            'task' => $task,
+        ]);
+    }
+
+    #[Route('/task/anonyme/{id}/togle', name: 'task_toggle_anonyme')]
+    public function toggleTaskAnonymeAction(EntityManagerInterface $manager, Task $task)
+    {
+        if ($task->getUser() != null) {
+            $this->addFlash('error', 'La tâche ne vous partiens pas.');
+            return $this->redirectToRoute('task_list');
+        }
+
+        $task->toggle(!$task->isIsDone());
+
+        $manager->flush();
+        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+
+        return $this->redirectToRoute('task_list_anonyme');
+    }
+
+
+    #[Route('/task/anonyme/{id}/delete', name: 'task_delete_anonyme')]
+    public function deleteTaskAnonymeAction(EntityManagerInterface $manager, Task $task)
+    {
+        if ($task->getUser() != null) {
+            $this->addFlash('error', 'La tâche ne vous partiens pas.');
+            return $this->redirectToRoute('task_list');
+        }
+        $manager->remove($task);
+        $manager->flush();
+        $this->addFlash('success', 'La tâche a bien été supprimée.');
+
+        return $this->redirectToRoute('task_list_anonyme');
+
+    }
+
 }

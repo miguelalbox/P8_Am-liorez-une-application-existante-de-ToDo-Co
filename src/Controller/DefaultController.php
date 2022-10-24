@@ -11,6 +11,9 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function indexAction(): Response
     {
-        return $this->render('default/index.html.twig');
+
+        return $this->render('default/index.html.twig', [
+            'user' => $this->getUser()
+        ]);
     }
 }
