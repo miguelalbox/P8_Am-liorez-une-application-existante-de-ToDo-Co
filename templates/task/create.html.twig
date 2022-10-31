@@ -3,13 +3,22 @@
 {% block title %}{% endblock %}
 
 {% block body %}
-<div class="row">
+    <div class="row form-task">
         {{ form_start(form) }}
-            {{ form_widget(form) }}
-
+        <div class="input">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="input">
+            {{ form_row(form.content) }}
+        </div>
+        <div class="input">
+            {{ form_row(form.isDone) }}
+        </div>
+        <div class="btn-form-task">
             <button type="submit" class="btn btn-success pull-right">Ajouter</button>
-        {{ form_end(form) }}
+            <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+        </div>
 
-        <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+        {{ form_end(form) }}
     </div>
 {% endblock %}
