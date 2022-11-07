@@ -53,7 +53,7 @@ class TaskController extends AbstractController
             $task->setCreatedAt((new \DateTimeImmutable('now')));
             $manager->persist($task);
             $manager->flush();
-            $this->addFlash('success', 'La tâche a été bien été ajoutée.');
+            $this->addFlash('success', 'La tâche a bien été ajoutée.');
 
             return $this->redirectToRoute('task_list');
         }
