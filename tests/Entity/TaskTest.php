@@ -35,31 +35,20 @@ class TaskTest extends KernelTestCase
         $this->assertCount(0, $error);
     }
 
-    //Ici on teste si le title est blank
-    public function testInvalidTitle()
-    {
-        self::bootKernel();
-        $container = static::getContainer();
-
-        $task = $this->getEntity();
-        $task->setTitle('');
-
-        $error = $container->get('validator')->validate($task);
-        //on s'attend un error
-        $this->assertCount(1, $error);
-    }
-
-    //Ici on teste si le contenu est blank
+    //Ici on teste si le title et le contenu est blank
     public function testInvalidContent()
     {
         self::bootKernel();
         $container = static::getContainer();
 
         $task = $this->getEntity();
+        $task->setTitle('');
         $task->setContent('');
 
         $error = $container->get('validator')->validate($task);
         //on s'attend un error
-        $this->assertCount(1, $error);
+        $this->assertCount(2, $error);
     }
+
+
 }

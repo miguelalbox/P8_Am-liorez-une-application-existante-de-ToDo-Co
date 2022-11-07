@@ -140,10 +140,10 @@ class TaskController extends AbstractController
     #[Route('/task/anonyme/{id}/edit', name: 'task_edit_anonyme')]
     public function editAnonymeAction(Request $request, EntityManagerInterface $manager, Task $task)
     {
-        if ($task->getUser() != null) {
+        /*if ($task->getUser() != null) {
             $this->addFlash('error', 'La tâche ne vous partiens pas.');
             return $this->redirectToRoute('task_list');
-        }
+        }*/
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
@@ -163,10 +163,10 @@ class TaskController extends AbstractController
     #[Route('/task/anonyme/{id}/togle', name: 'task_toggle_anonyme')]
     public function toggleTaskAnonymeAction(EntityManagerInterface $manager, Task $task)
     {
-        if ($task->getUser() != null) {
+        /*if ($task->getUser() != null) {
             $this->addFlash('error', 'La tâche ne vous partiens pas.');
             return $this->redirectToRoute('task_list');
-        }
+        }*/
 
         $task->toggle(!$task->isIsDone());
 
@@ -180,10 +180,10 @@ class TaskController extends AbstractController
     #[Route('/task/anonyme/{id}/delete', name: 'task_delete_anonyme')]
     public function deleteTaskAnonymeAction(EntityManagerInterface $manager, Task $task)
     {
-        if ($task->getUser() != null) {
+        /*if ($task->getUser() != null) {
             $this->addFlash('error', 'La tâche ne vous partiens pas.');
             return $this->redirectToRoute('task_list');
-        }
+        }*/
         $manager->remove($task);
         $manager->flush();
         $this->addFlash('success', 'La tâche a bien été supprimée.');
