@@ -23,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @Assert\NotBlank()
+     * @Assert\Regex( pattern = "/[a-zA-Z]$/", message = "Merci de saissir de characteres")
      */
     #[ORM\Column(length: 180, unique: false)]
 
@@ -30,6 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @Assert\NotBlank()
+     * @Assert\Email( message = "L'email n'est pas un email valide")
      */
     #[ORM\Column(length: 180, unique: true)]
 

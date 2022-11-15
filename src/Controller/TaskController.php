@@ -17,14 +17,15 @@ class TaskController extends AbstractController
     public function listAction(TaskRepository $taskRepo): Response
     {
 
-        $user = $this->getUser()->getId();
+        $user = $this->getUser();
 
-        $task = $taskRepo->findBy(['user' => $user]);
+        //$task = $taskRepo->findBy(['user' => $user]);
+        $tasks = $user->getTasks();
 
-        //dd($task);
+        //dd($user);
 
         return $this->render('task/list.html.twig', [
-            'tasks' => $task,
+            'tasks' => $tasks,
         ]);
     }
     #[Route('/task/done', name: 'task_list_done')]
@@ -74,6 +75,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($task);
             $manager->flush();
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -115,9 +117,15 @@ class TaskController extends AbstractController
             $this->addFlash('error', 'La tâche ne vous partiens pas.');
             return $this->redirectToRoute('task_list');
         }
-        $manager->remove($task);
+        //$manager->remove($task);
+        //$manager->flush();
+        //$this->addFlash('success', 'La tâche a bien été supprimée.');
+        $user = $this->getUser();
+
+        $tasks = $user->removeTask($task);
         $manager->flush();
         $this->addFlash('success', 'La tâche a bien été supprimée.');
+
 
         return $this->redirectToRoute('task_list');
 

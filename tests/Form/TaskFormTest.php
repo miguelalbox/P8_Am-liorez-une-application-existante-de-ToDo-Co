@@ -92,7 +92,7 @@ class TaskFormTest extends WebTestCase
         //on login le client
         $client->loginUser($user);
         //on se positionne sur l'url
-        $crawler = $client->request('GET', '/task/63/edit');
+        $crawler = $client->request('GET', '/task/31/edit');
 
         //Recuperer le formulaire
         $submitButton = $crawler->selectButton('Modifier');

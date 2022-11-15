@@ -2,7 +2,9 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\Task;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserTest extends KernelTestCase{
@@ -12,8 +14,8 @@ class UserTest extends KernelTestCase{
     {
         return (new User())
             ->setUsername('TestUnit')
-            ->setEmail('test@test.fr')
-            ->setPassword('000000');
+            ->setEmail('testo@test.fr')
+            ->setPassword('000000000');
     }
 
     //ici on test que les données entre correctement
@@ -30,32 +32,42 @@ class UserTest extends KernelTestCase{
     }
 
     //Ici on teste si le username est blank
-    public function testInvalidName()
+    public function testInvalidBlank()
     {
         self::bootKernel();
         $container = static::getContainer();
 
         $user = $this->getEntity();
+        //test notblank
         $user->setUsername('');
-
-        $error = $container->get('validator')->validate($user);
-        //on s'attend un error
-        $this->assertCount(1, $error);
-    }
-
-    //Ici on teste si le mail est blank
-    public function testInvalidMail()
-    {
-        self::bootKernel();
-        $container = static::getContainer();
-
-        $user = $this->getEntity();
         $user->setEmail('');
 
+
         $error = $container->get('validator')->validate($user);
         //on s'attend un error
-        $this->assertCount(1, $error);
+        $this->assertCount(2, $error);
     }
+
+    //Ici on teste si le username correspond pas aux accert
+    public function testInvalidNumberOrMail()
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+
+        $user = $this->getEntity();
+
+        //test chifres username et mail sans structure mail
+        $user->setUsername('Test123');
+        $user->setEmail('test');
+
+        $error = $container->get('validator')->validate($user);
+        //on s'attend un error
+        $this->assertCount(2, $error);
+    }
+
+
+
+
 
 
 }
