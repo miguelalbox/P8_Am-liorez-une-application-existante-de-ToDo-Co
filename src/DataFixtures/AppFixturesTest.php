@@ -30,6 +30,16 @@ class AppFixturesTest extends Fixture
         $user->setEmail('mikyfiestas@gmail.com');
         $user->setRoles(['ROLE_ADMIN']);
         $user->setPassword(password_hash('123', PASSWORD_DEFAULT));
+        $manager->persist($user);
+
+        //Creation d'user especifique
+
+        $user = new User;
+        $user->setUsername('Miguel');
+        $user->setEmail('miguelsj.pro@gmail.com');
+        $user->setRoles(['ROLE_USER']);
+        $user->setPassword(password_hash('123', PASSWORD_DEFAULT));
+        $manager->persist($user);
         //Taches sans utilisateur
         for($i = 0; $i < 20; $i++){
 

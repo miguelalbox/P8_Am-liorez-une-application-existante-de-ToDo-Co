@@ -79,7 +79,7 @@ class UserControllerTest extends WebTestCase
         $user = $this->userRoleAdmin();
         $client->loginUser($user);
         //on se positionne sur l'url
-        $crawler = $client->request('GET', '/users/9/delete');
+        $crawler = $client->request('GET', '/users/10/delete');
 
         //On verify que tout est bien passé
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);

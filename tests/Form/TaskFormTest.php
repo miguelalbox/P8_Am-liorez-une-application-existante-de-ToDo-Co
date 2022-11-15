@@ -215,7 +215,7 @@ class TaskFormTest extends WebTestCase
         $this->assertResponseRedirects('/task');
 
     }
-    //Tester que je peut suprimer une task
+    //Tester que je ne peut pas suprimer une task d'autre user
     public function testTaskOtherUserDelete( )
     {
         $client = static::createClient();
@@ -242,7 +242,7 @@ class TaskFormTest extends WebTestCase
         //on login le client
         $client->loginUser($user);
         //on se positionne sur l'url
-        $crawler = $client->request('GET', '/task/anonyme/20/edit');
+        $crawler = $client->request('GET', '/task/anonyme/5/edit');
 
         //Recuperer le formulaire
         $submitButton = $crawler->selectButton('Modifier');
@@ -269,7 +269,7 @@ class TaskFormTest extends WebTestCase
         //on login le client
         $client->loginUser($user);
         //on se positionne sur l'url
-        $crawler = $client->request('GET', '/task/anonyme/20/edit');
+        $crawler = $client->request('GET', '/task/anonyme/5/edit');
 
         //On verify que tout est bien passé
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
@@ -308,7 +308,7 @@ class TaskFormTest extends WebTestCase
         //on login le client
         $client->loginUser($user);
         //on se positionne sur l'url
-        $crawler = $client->request('GET', '/task/anonyme/20/togle');
+        $crawler = $client->request('GET', '/task/anonyme/5/togle');
 
         //On verify que tout est bien passé
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
@@ -340,7 +340,7 @@ class TaskFormTest extends WebTestCase
 
     }
 
-    //Tester que je peut suprimer une task anonyme sans droits admin
+    //Tester que je peut pas suprimer une task anonyme sans droits admin
     public function testTaskUserAnonymeDeleteRoleUser( )
     {
         $client = static::createClient();
@@ -349,7 +349,7 @@ class TaskFormTest extends WebTestCase
         //on login le client
         $client->loginUser($user);
         //on se positionne sur l'url
-        $crawler = $client->request('GET', '/task/anonyme/20/delete');
+        $crawler = $client->request('GET', '/task/anonyme/5/delete');
 
         //On verify que tout est bien passé
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
