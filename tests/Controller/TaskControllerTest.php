@@ -60,8 +60,7 @@ class TaskControllerTest extends WebTestCase
 
         //On verify que tout est bien passé
         $this->assertResponseIsSuccessful();
-        //on verify que le button ajouter existe sur la page
-        //$this->assertSelectorTextContains('button', 'Ajouter');
+
     }
 
     //voir de taches a faire si je ne suis pas connectée
@@ -89,8 +88,7 @@ class TaskControllerTest extends WebTestCase
 
         //On verify que tout est bien passé
         $this->assertResponseIsSuccessful();
-        //on verify que le button ajouter existe sur la page
-        //$this->assertSelectorTextContains('button', 'Ajouter');
+
     }
 
     //voir de taches a faire si je ne suis pas connectée
@@ -148,8 +146,7 @@ class TaskControllerTest extends WebTestCase
         $client->submit($form);
         //On verify que tout est bien passé
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-        //$this->assertResponseIsSuccessful();
-        //on verify que on redirectione vers users
+
 
     }
     //suprimer une tache
@@ -178,8 +175,6 @@ class TaskControllerTest extends WebTestCase
 
         //On verify que tout est bien passé
         $this->assertResponseIsSuccessful();
-        //on verify que le button ajouter existe sur la page
-        //$this->assertSelectorTextContains('button', 'Ajouter');
     }
 
     //voir de taches a faire qui partien a personne si je ne suis pas connectée

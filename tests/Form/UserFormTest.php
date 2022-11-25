@@ -110,7 +110,6 @@ class UserFormTest extends WebTestCase
 
         //On verify que tout est bien passé avec un status 302
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-        //$this->assertResponseRedirects('/');
     }
     //Admin user
 

@@ -59,8 +59,7 @@ class UserControllerTest extends WebTestCase
 
         //On verify que tout est bien passé
         $this->assertResponseIsSuccessful();
-        //on verify que le button ajouter existe sur la page
-        //$this->assertSelectorTextContains('button', 'Ajouter');
+
     }
 
     //voir la liste de utilisateurs avec role user
@@ -87,8 +86,7 @@ class UserControllerTest extends WebTestCase
 
         //On verify que tout est bien passé
         $this->assertResponseIsSuccessful();
-        //on verify que le button ajouter existe sur la page
-        //$this->assertSelectorTextContains('button', 'Ajouter');
+
     }
     //voir la liste de utilisateurs avec role user
     public function testDeleteUsers()
