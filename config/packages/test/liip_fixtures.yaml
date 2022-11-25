@@ -2,4 +2,4 @@ liip_test_fixtures:
   keep_database_and_schema: false
   cache_metadata: true
   cache_db: ~
-  mysql: 'Liip\TestFixturesBundle\Services\DatabaseBackup\MysqlDatabaseBackup'
+  #mysql: 'Liip\TestFixturesBundle\Services\DatabaseBackup\MysqlDatabaseBackup'

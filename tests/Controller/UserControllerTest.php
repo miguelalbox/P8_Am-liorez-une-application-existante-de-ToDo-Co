@@ -5,11 +5,29 @@ namespace App\Tests\Controller;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends WebTestCase
 {
+    //Demarer les fixtures
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->databaseTool->loadFixtures([
+            'App\DataFixtures\AppFixturesTest'
+        ]);
+        self::ensureKernelShutdown();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        unset($this->databaseTool);
+    }
+
     public function userRoleUser(): User
     {
 

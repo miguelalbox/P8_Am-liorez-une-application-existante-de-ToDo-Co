@@ -63,6 +63,16 @@ class AppFixturesTest extends Fixture
             $task->setUser($user);
             $manager->persist($task);
         }
+        for($i = 0; $i < 3; $i++){
+
+            $task = new Task();
+            $task->setTitle('TitleDone' . $i);
+            $task->setContent('Content' . $i);
+            $task->setIsDone(true);
+            $task->setCreatedAt((new \DateTimeImmutable('now')));
+            $task->setUser($user);
+            $manager->persist($task);
+        }
 
         $manager->flush();
     }

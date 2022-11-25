@@ -4,11 +4,29 @@ namespace App\Tests\Form;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserFormTest extends WebTestCase
 {
+    //Demarer les fixtures
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->databaseTool->loadFixtures([
+            'App\DataFixtures\AppFixturesTest'
+        ]);
+        self::ensureKernelShutdown();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        unset($this->databaseTool);
+    }
+
     public function userRoleUser() :User
     {
 
@@ -132,7 +150,7 @@ class UserFormTest extends WebTestCase
         //on login le client
         $client->loginUser($user);
         //on se positionne sur l'url
-        $crawler = $client->request('GET', '/users/17/edit');
+        $crawler = $client->request('GET', '/users/5/edit');
 
         //Recuperer le formulaire
         $submitButton = $crawler->selectButton('Modifier');
