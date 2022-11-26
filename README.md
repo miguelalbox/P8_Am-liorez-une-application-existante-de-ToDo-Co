@@ -25,3 +25,5 @@
 
 
 - Pour vérifier que le projet est correct on va lancer le **teste unitaire**, pour cella on va dans le terminal et on lance la commande ***vendor/bin/phpunit --coverage-html public/test-coverage*** puis après quelque seconde on voit sur le terminal si tout le test est bien passé. Sinon il affichera ou se trouve l’erreur dans la partie test et on aurait plous de visibilité pour résoudre le bug.
+
+Si vous apportes de modifications au projet n’oubliez pas de faires de testes unitaires de votre code, pour cella vous devez aller sur **src/tests** et dedans vous allez trouver tout les fichier dans lesquelles vous pouvez faire de test, tel que le **Controller**, les **Formualires** et les **Entites**.
