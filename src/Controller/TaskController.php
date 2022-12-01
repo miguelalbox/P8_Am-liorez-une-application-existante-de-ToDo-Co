@@ -19,24 +19,26 @@ class TaskController extends AbstractController
 
         $user = $this->getUser();
 
-        $tasks = $user->getTasks();
+        $tasks = $taskRepo->findAll();
 
 
 
         return $this->render('task/list.html.twig', [
             'tasks' => $tasks,
+            'user' => $user,
         ]);
     }
     #[Route('/task/done', name: 'task_list_done')]
     public function listDoneAction(TaskRepository $taskRepo): Response
     {
 
-        $user = $this->getUser()->getId();
+        $user = $this->getUser();
 
-        $task = $taskRepo->findBy(['user' => $user]);
+        $task = $taskRepo->findAll();
 
         return $this->render('task/list-done.html.twig', [
             'tasks' => $task,
+            'user' => $user,
         ]);
     }
 

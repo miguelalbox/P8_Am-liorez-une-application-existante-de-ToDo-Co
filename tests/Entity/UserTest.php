@@ -64,6 +64,26 @@ class UserTest extends KernelTestCase{
         //on s'attend un error
         $this->assertCount(2, $error);
     }
+    //test get task
+    public function testUserCreateWhitTask()
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+
+        $user = $this->getEntity();
+
+        $task = new Task();
+        $task->setTitle("Tache");
+        $task->setContent("Contenu");
+        $user->addTask($task);
+
+        $this->assertEquals($user->getTasks()->count(), 1);
+
+
+        $error = $container->get('validator')->validate($user);
+        //on s'attend 0 error
+        $this->assertCount(0, $error);
+    }
 
 
 

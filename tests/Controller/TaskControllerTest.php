@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Entity\User;
+use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -116,14 +117,19 @@ class TaskControllerTest extends WebTestCase
         $submitButton = $crawler->selectButton('Ajouter');
         $form = $submitButton->form();
 
-        $form["task[title]"] = "Tache modifie";
-        $form["task[content]"] = "contenu modifie";
+        $form["task[title]"] = "Tache ajouter";
+        $form["task[content]"] = "contenu ajouter";
         $form["task[isDone]"] = false;
 
         //Soumettre le formulaire
         $client->submit($form);
         //On verify que tout est bien passé
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+
+        $container = static::getContainer();
+        $taskRepository = $container->get(TaskRepository::class);
+        $task = $taskRepository->findOneBy(['title' => 'Tache ajouter']);
+        $this->assertEquals($task->getContent(), "contenu ajouter");
 
     }
     //modifier une tache
@@ -147,6 +153,11 @@ class TaskControllerTest extends WebTestCase
         //On verify que tout est bien passé
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
 
+        $container = static::getContainer();
+        $taskRepository = $container->get(TaskRepository::class);
+        $task = $taskRepository->findOneBy(['title' => 'Tache modifie']);
+        $this->assertEquals($task->getContent(), "contenu modifie");
+
 
     }
     //suprimer une tache
@@ -162,6 +173,12 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         //on verify que on redirectione vers users
         $this->assertResponseRedirects('/task');
+
+        $container = static::getContainer();
+        $taskRepository = $container->get(TaskRepository::class);
+        $task = $taskRepository->find(22);
+        $this->assertEquals($task, null);
+
     }
 
     //Voir une tache a faire qui partien a personne
